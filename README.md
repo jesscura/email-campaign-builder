@@ -13,17 +13,17 @@ A full-featured, extensible email campaign builder:
 ## Quick Start
 
 1) Install
-\`\`\`bash
+```bash
 npm i
 cp .env.example .env.local
 # set ENCRYPTION_SECRET and NEXT_PUBLIC_BASE_URL
-\`\`\`
+```
 
 2) Run
-\`\`\`bash
+```bash
 npm run dev
 # open http://localhost:3000
-\`\`\`
+```
 
 3) Zoho (two options)
 - Easy Setup (recommended): Settings → Zoho CRM — Easy Setup → paste Region, Client ID, Client Secret → Save → Connect Zoho
@@ -33,7 +33,7 @@ npm run dev
 
 - Builder
   - Blocks: Text, Image, Button, Divider, Spacer, Two-Column, Social Links
-  - Personalization: Insert merge tags from Zoho modules/fields (e.g., \`{{Leads.First_Name}}\`)
+  - Personalization: Insert merge tags from Zoho modules/fields (e.g., `{{Leads.First_Name}}`)
   - Autosave to localStorage
 - Templates
   - Search, tags, pagination
