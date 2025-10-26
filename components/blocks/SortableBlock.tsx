@@ -3,7 +3,7 @@ import { useCampaignStore } from '@/store/campaign'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { BlockRenderer } from './renderers/BlockRenderer'
-import { BlockEditor } from '../BlockEditor'
+import { BlockEditor } from './BlockEditor'
 
 export function SortableBlock({ block }: { block: any }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: block.id })
