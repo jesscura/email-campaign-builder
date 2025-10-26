@@ -2,10 +2,8 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 ENV NODE_ENV=production
-COPY package.json package-lock.json* pnpm-lock.yaml* yarn.lock* .npmrc* ./ 2>/dev/null || true
-RUN if [ -f pnpm-lock.yaml ]; then npm i -g pnpm && pnpm i --frozen-lockfile; \
-    elif [ -f yarn.lock ]; then yarn install --frozen-lockfile; \
-    else npm ci; fi
+COPY package.json package-lock.json ./
+RUN npm ci
 COPY . .
 RUN npm run build
 

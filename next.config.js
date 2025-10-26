@@ -5,6 +5,13 @@ const nextConfig = {
       bodySizeLimit: '2mb'
     }
   },
-  output: 'standalone'
+  output: 'standalone',
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      // Mark mjml as external to avoid bundling it
+      config.externals = [...(config.externals || []), 'mjml']
+    }
+    return config
+  }
 }
 module.exports = nextConfig
