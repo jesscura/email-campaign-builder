@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  email-campaign-builder:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_BASE_URL: "http://localhost:3000"
+      ENCRYPTION_SECRET: "change-this-32-characters-min"
+      # Optional real Zoho:
+      # ZOHO_CLIENT_ID: ""
+      # ZOHO_CLIENT_SECRET: ""
+      # ZOHO_REDIRECT_URI: "http://localhost:3000/api/zoho/callback"
+      # ZOHO_BASE_URL: "https://accounts.zoho.com"

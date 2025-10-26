@@ -1,0 +1,16 @@
+{
+  "subject": "Welcome {{Leads.First_Name}} — Let’s get started",
+  "preheader": "Here’s a quick tour and a special gift.",
+  "fromName": "Your Brand",
+  "fromEmail": "hello@example.com",
+  "theme": { "primaryColor": "#0f766e", "backgroundColor": "#ffffff", "textColor": "#0b0f19" },
+  "blocks": [
+    { "id": "b1", "type": "image", "data": { "src": "https://via.placeholder.com/1200x420?text=Welcome+Hero", "alt": "Welcome hero" } },
+    { "id": "b2", "type": "text", "data": { "html": "<h2>Welcome, {{Leads.First_Name}}!</h2><p>We’re thrilled to have you.</p>" } },
+    { "id": "b3", "type": "button", "data": { "label": "Get Started", "href": "https://example.com/start?utm_source=newsletter&utm_medium=email&utm_campaign=welcome" } },
+    { "id": "b4", "type": "divider", "data": {} },
+    { "id": "b5", "type": "two_column", "data": { "leftHtml": "<h3>Tip 1</h3><p>Short helpful tip.</p>", "rightHtml": "<h3>Tip 2</h3><p>Another short helpful tip.</p>" } },
+    { "id": "b6", "type": "social", "data": { "links": [{ "platform": "Twitter", "url": "https://twitter.com/your" }, { "platform": "Instagram", "url": "https://instagram.com/your" }] } }
+  ],
+  "abTest": { "variantA": { "subject": "Welcome aboard, {{Leads.First_Name}}!" }, "variantB": { "subject": "Let’s get started, {{Leads.First_Name}}" } }
+}
