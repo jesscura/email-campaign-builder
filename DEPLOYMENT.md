@@ -22,13 +22,13 @@ Next.js 14 (App Router) + TypeScript. Node runtime route handlers render MJML an
 
 ## Docker
 
-\`\`\`bash
+```bash
 docker build -t email-campaign-builder:latest .
 docker run --rm -p 3000:3000 \
   -e NEXT_PUBLIC_BASE_URL=http://localhost:3000 \
   -e ENCRYPTION_SECRET="change-this-32-characters-min" \
   email-campaign-builder:latest
-\`\`\`
+```
 
 ## Checklist
 

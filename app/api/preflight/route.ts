@@ -9,6 +9,7 @@ export async function POST(req: NextRequest) {
   const { campaign } = await req.json() as { campaign: Campaign }
   const checks = []
 
+  // Subject length
   const subj = campaign.subject || ''
   checks.push({
     id: 'subject_len',
@@ -17,6 +18,7 @@ export async function POST(req: NextRequest) {
     message: `${subj.length} chars (aim 32–42 for mobile)`
   })
 
+  // Personalization
   checks.push({
     id: 'subject_pers',
     title: 'Subject Personalization',
@@ -24,6 +26,7 @@ export async function POST(req: NextRequest) {
     message: /\{\{.+\}\}/.test(subj) ? 'Personalization detected' : 'Consider adding merge tags (e.g., {{Leads.First_Name}})'
   })
 
+  // Spammy words
   const subjLower = subj.toLowerCase()
   const spamFound = spamWords.filter(w => subjLower.includes(w))
   checks.push({
@@ -33,6 +36,7 @@ export async function POST(req: NextRequest) {
     message: spamFound.length ? `Avoid: ${spamFound.join(', ')}` : 'No common spam terms detected'
   })
 
+  // CTA presence
   const hasCTA = campaign.blocks.some((b: any) => (b.type === 'button' && b.data.label) || (b.type === 'text' && ctaRegex.test(b.data.html)))
   checks.push({
     id: 'cta',
@@ -41,6 +45,7 @@ export async function POST(req: NextRequest) {
     message: hasCTA ? 'CTA detected' : 'Add a clear CTA (e.g., button)'
   })
 
+  // Alt text for images
   const images = (campaign.blocks as any[]).filter(b => b.type === 'image')
   const missingAlt = images.filter((i: any) => !i.data.alt).length
   checks.push({
@@ -50,6 +55,7 @@ export async function POST(req: NextRequest) {
     message: missingAlt === 0 ? 'All images have alt text' : `${missingAlt} image(s) missing alt text`
   })
 
+  // Link presence & UTM
   const links = (campaign.blocks as any[]).flatMap((b: any) => {
     if (b.type === 'button' && b.data.href) return [b.data.href]
     if (b.type === 'text') {
@@ -66,6 +72,7 @@ export async function POST(req: NextRequest) {
     message: links.length === 0 ? 'No links found' : missingUTM ? `${missingUTM}/${links.length} link(s) missing UTM` : 'All links have UTMs'
   })
 
+  // Contrast
   const tc = tinycolor(campaign.theme.textColor)
   const bg = tinycolor(campaign.theme.backgroundColor)
   const contrast = tinycolor.readability(bg, tc)
