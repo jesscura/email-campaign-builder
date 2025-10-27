@@ -8,7 +8,7 @@ export class StripeProvider extends BillingProvider {
 
   constructor(apiKey: string, webhookSecret: string) {
     super();
-    this.stripe = new Stripe(apiKey, { apiVersion: '2024-12-18.acacia' });
+    this.stripe = new Stripe(apiKey, { apiVersion: '2024-12-18.acacia' as any });
     this.webhookSecret = webhookSecret;
   }
 
@@ -56,7 +56,7 @@ export class StripeProvider extends BillingProvider {
         customerId: subscription.customer as string,
         planId: subscription.items.data[0].price.id,
         status: subscription.status as any,
-        currentPeriodEnd: new Date(subscription.current_period_end * 1000),
+        currentPeriodEnd: new Date((subscription as any).current_period_end * 1000),
       };
     } catch (error) {
       return null;

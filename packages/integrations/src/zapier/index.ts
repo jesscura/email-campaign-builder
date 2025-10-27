@@ -1,4 +1,4 @@
-import type { Integration } from './types';
+import type { Integration } from '../types';
 
 export class ZapierIntegration implements Integration {
   id = 'zapier';
