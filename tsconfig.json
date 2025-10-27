@@ -39,6 +39,7 @@
   ],
   "exclude": [
     "node_modules",
+    "sagestone-email",
     "apps/api",
     "apps/web",
     "apps/workers",
