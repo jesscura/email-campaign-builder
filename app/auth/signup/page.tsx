@@ -74,12 +74,12 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
-      <div className="w-full max-w-md space-y-8 rounded-2xl bg-white/80 backdrop-blur-sm border border-slate-200 p-8 shadow-2xl">
+    <div className="flex min-h-screen items-center justify-center px-4 bg-slate-50">
+      <div className="w-full max-w-md space-y-8 rounded-xl bg-white border border-slate-200 p-8 shadow-lg">
         <div className="text-center">
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Create Account</h2>
+          <h2 className="text-3xl font-bold text-slate-900">Create Account</h2>
           <p className="mt-2 text-sm text-slate-600">
-            Start building email campaigns today
+            Start using SageStone today
           </p>
         </div>
 
@@ -102,7 +102,7 @@ export default function SignUpPage() {
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
               }
-              className="mt-1 block w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition-all"
+              className="mt-1 block w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900/20 transition-all"
             />
           </div>
 
@@ -118,7 +118,7 @@ export default function SignUpPage() {
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
-              className="mt-1 block w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition-all"
+              className="mt-1 block w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900/20 transition-all"
             />
           </div>
 
@@ -134,7 +134,7 @@ export default function SignUpPage() {
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
-              className="mt-1 block w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition-all"
+              className="mt-1 block w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900/20 transition-all"
             />
             <p className="mt-1 text-xs text-slate-500">
               Must be at least 8 characters
@@ -156,14 +156,14 @@ export default function SignUpPage() {
               onChange={(e) =>
                 setFormData({ ...formData, confirmPassword: e.target.value })
               }
-              className="mt-1 block w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition-all"
+              className="mt-1 block w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900/20 transition-all"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-3 text-white font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full rounded-lg bg-slate-900 px-4 py-3 text-white font-semibold hover:bg-slate-800 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Creating account...' : 'Create account'}
           </button>
@@ -207,7 +207,7 @@ export default function SignUpPage() {
 
         <p className="text-center text-sm text-slate-600">
           Already have an account?{' '}
-          <Link href="/auth/signin" className="font-medium text-blue-600 hover:underline">
+          <Link href="/auth/signin" className="font-medium text-slate-900 hover:underline">
             Sign in
           </Link>
         </p>
