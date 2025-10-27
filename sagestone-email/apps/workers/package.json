@@ -1,0 +1,14 @@
+{
+  "name": "@sagestone/workers",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "node src/index.js",
+    "build": "echo 'no build step for workers yet'",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "bullmq": "^5.15.0",
+    "ioredis": "^5.4.1"
+  }
+}
