@@ -19,9 +19,11 @@ Required:
 - **NEXTAUTH_SECRET** (32+ chars; for NextAuth.js)
 - **NEXTAUTH_URL** (your deployment URL)
 
-Database (Vercel Postgres - automatically provided):
-- **POSTGRES_PRISMA_URL** (with connection pooling)
-- **POSTGRES_URL_NON_POOLING** (direct connection for migrations)
+Database:
+- **DATABASE_URL** - For local: PostgreSQL connection string. For Vercel: Set to POSTGRES_PRISMA_URL
+
+Vercel Postgres (automatically provided when you add Vercel Postgres storage):
+- POSTGRES_URL, POSTGRES_PRISMA_URL, POSTGRES_URL_NON_POOLING
 
 Optional (can configure via UI instead):
 - ZOHO_CLIENT_ID, ZOHO_CLIENT_SECRET, ZOHO_REDIRECT_URI, ZOHO_BASE_URL

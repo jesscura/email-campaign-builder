@@ -237,6 +237,20 @@ npm run build
 npm start
 ```
 
+## 🔒 Security
+
+### Known Vulnerabilities
+
+The project currently has dependencies with known vulnerabilities:
+
+- **html-minifier ReDoS vulnerability** (High severity)
+  - Transitive dependency through mjml
+  - Impact: Low in our context (email templates are not user-provided HTML)
+  - Status: Waiting for mjml maintainers to update html-minifier dependency
+  - Mitigation: Email templates are created by authenticated users, not arbitrary external input
+
+Run `npm audit` for a complete list of vulnerabilities.
+
 ## 🚀 Deployment
 
 ### Vercel (Recommended)
