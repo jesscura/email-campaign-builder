@@ -1,11 +1,14 @@
 # Deployment Guide
 
-Next.js 14 (App Router) + TypeScript. Node runtime route handlers render MJML and inline CSS.
+This is a Next.js 14 application with App Router and TypeScript. The application uses Vercel Postgres for database hosting.
+
+For detailed Vercel deployment instructions, see [VERCEL_SETUP.md](VERCEL_SETUP.md).
 
 ## Prerequisites
 
 - Node.js 18-20
 - npm or compatible package manager
+- Vercel account (recommended)
 - Docker (optional, for container deployment)
 
 ## Environment variables
@@ -13,9 +16,27 @@ Next.js 14 (App Router) + TypeScript. Node runtime route handlers render MJML an
 Required:
 - **ENCRYPTION_SECRET** (32+ chars; encrypts Zoho settings & tokens)
 - **NEXT_PUBLIC_BASE_URL** (e.g., http://localhost:3000 or https://your-domain)
+- **NEXTAUTH_SECRET** (32+ chars; for NextAuth.js)
+- **NEXTAUTH_URL** (your deployment URL)
+
+Database (Vercel Postgres - automatically provided):
+- **POSTGRES_PRISMA_URL** (with connection pooling)
+- **POSTGRES_URL_NON_POOLING** (direct connection for migrations)
 
 Optional (can configure via UI instead):
 - ZOHO_CLIENT_ID, ZOHO_CLIENT_SECRET, ZOHO_REDIRECT_URI, ZOHO_BASE_URL
+
+## Quick Start with Vercel
+
+**See [VERCEL_SETUP.md](VERCEL_SETUP.md) for complete Vercel deployment instructions.**
+
+1. Push your repository to GitHub
+2. Import to Vercel
+3. Add Vercel Postgres from Storage tab
+4. Configure remaining environment variables
+5. Deploy
+
+The Vercel Postgres integration automatically provides database environment variables.
 
 ## Vercel (recommended)
 
