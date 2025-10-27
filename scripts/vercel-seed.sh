@@ -2,6 +2,14 @@
 set -euo pipefail
 
 # Load environment (including POSTGRES_* pulled via `npm run env:pull`)
+# Prefer values from .env.vercel, allow .env.local to override if desired
+if [ -f .env.vercel ]; then
+  set -a
+  # shellcheck disable=SC1091
+  source .env.vercel
+  set +a
+fi
+
 if [ -f .env.local ]; then
   set -a
   # shellcheck disable=SC1091

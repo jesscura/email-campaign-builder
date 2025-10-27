@@ -10,12 +10,13 @@
     "postinstall": "prisma generate || true",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:seed": "ts-node prisma/seed.ts",
+  "prisma:seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seed.ts",
     "prisma:studio": "prisma studio",
     "migrate:deploy": "prisma migrate deploy",
     "vercel:link": "vercel link",
     "env:pull": "vercel env pull .env.local",
     "db:migrate:vercel": "bash scripts/vercel-migrate.sh",
+  "db:migrate:init": "bash scripts/vercel-migrate-init.sh",
     "db:seed:vercel": "bash scripts/vercel-seed.sh"
   },
   "dependencies": {
@@ -66,6 +67,6 @@
     "typescript": "^5.6.3"
   },
   "engines": {
-    "node": ">=18 <21"
+    "node": ">=18 <23"
   }
 }
