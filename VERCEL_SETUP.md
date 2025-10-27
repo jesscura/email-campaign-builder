@@ -22,9 +22,13 @@ This guide explains how to deploy the Email Campaign Builder to Vercel with Post
 In your Vercel project settings, add the following environment variables:
 
 ### Database (Automatically added by Vercel Postgres)
+Vercel automatically provides:
 - `POSTGRES_URL` - Connection string for Postgres
-- `POSTGRES_PRISMA_URL` - Connection string for Prisma
+- `POSTGRES_PRISMA_URL` - Connection string for Prisma (with pooling)
 - `POSTGRES_URL_NON_POOLING` - Direct connection for migrations
+
+**Required**: Add this manually in Vercel:
+- `DATABASE_URL` - Set this to the value of `POSTGRES_PRISMA_URL` from Vercel's automatic variables
 
 ### Authentication
 - `NEXTAUTH_URL` - Your Vercel deployment URL (e.g., https://your-app.vercel.app)
@@ -64,31 +68,29 @@ In your Vercel project settings, add the following environment variables:
 - `ENCRYPTION_SECRET` - Generate with: `openssl rand -base64 32`
 - `NEXT_PUBLIC_BASE_URL` - Your Vercel deployment URL
 
-## Step 3: Update Database URL in .env.example
+## Step 3: Verify Environment Configuration
 
-Update the `.env.example` file to reflect Vercel Postgres usage:
+The `.env.example` file is already configured correctly for both local and Vercel deployment:
 
 ```env
 # For local development, use your own PostgreSQL instance
 DATABASE_URL="postgresql://user:password@localhost:5432/email_campaign_db"
 
-# For Vercel deployment, these are automatically provided by Vercel Postgres
-# POSTGRES_URL
-# POSTGRES_PRISMA_URL
-# POSTGRES_URL_NON_POOLING
+# For Vercel deployment, set DATABASE_URL to POSTGRES_PRISMA_URL in Vercel settings
 ```
 
-## Step 4: Update Prisma Schema for Vercel
+## Step 4: Verify Prisma Schema
 
-Ensure your `prisma/schema.prisma` is configured correctly:
+The `prisma/schema.prisma` is already configured correctly:
 
 ```prisma
 datasource db {
   provider = "postgresql"
-  url      = env("POSTGRES_PRISMA_URL") // Uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // Uses direct connection for migrations
+  url      = env("DATABASE_URL")
 }
 ```
+
+This configuration works for both local development and Vercel deployment. In Vercel, set `DATABASE_URL` to the value of `POSTGRES_PRISMA_URL`.
 
 ## Step 5: Run Database Migrations
 
@@ -113,11 +115,11 @@ npx prisma migrate deploy
 Create a GitHub Action to run migrations on deploy (recommended for production).
 
 ### Option C: Manual via Vercel Dashboard
-1. Go to your project settings
-2. Navigate to "Settings" → "Environment Variables"
-3. Temporarily add `POSTGRES_URL_NON_POOLING` as `DATABASE_URL`
-4. Trigger a new deployment
-5. The build process will run migrations
+1. Ensure `DATABASE_URL` is set to `POSTGRES_PRISMA_URL` in your Vercel environment variables
+2. For migrations, you may need to temporarily switch to direct connection:
+   - Update `DATABASE_URL` to point to `POSTGRES_URL_NON_POOLING` 
+   - Trigger a deployment that runs migrations
+   - Switch back to `POSTGRES_PRISMA_URL` after migrations complete
 
 ## Step 6: Seed the Database (Optional)
 

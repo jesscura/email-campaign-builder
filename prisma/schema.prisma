@@ -6,8 +6,8 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL") // Uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // Uses direct connection for migrations
+  // Use DATABASE_URL for local dev, falls back to POSTGRES_PRISMA_URL for Vercel
+  url       = env("DATABASE_URL")
 }
 
 // ============================================
