@@ -97,7 +97,7 @@ export default function DashboardPage() {
         <QuickActionCard
           title="Manage Audience"
           description="Add and segment subscribers"
-          href="/audience"
+            href="/audiences"
           icon="👥"
         />
         <QuickActionCard
