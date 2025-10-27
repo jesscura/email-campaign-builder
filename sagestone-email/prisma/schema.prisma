@@ -1,0 +1,363 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Core
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  password     String?
+  name         String?
+  image        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  twoFactor    TwoFactorSecret?
+  memberships  WorkspaceMember[]
+  apiKeys      ApiKey[]
+  auditLogs    AuditLog[]
+}
+
+model TwoFactorSecret {
+  userId  String  @id
+  secret  String
+  backupCodes String[]
+  enabled Boolean @default(false)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Workspace {
+  id          String   @id @default(cuid())
+  name        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  members     WorkspaceMember[]
+  plans       Subscription[]
+  domains     Domain[]
+  contacts    Contact[]
+  segments    Segment[]
+  campaigns   Campaign[]
+  flows       Flow[]
+  webhooks    WebhookEndpoint[]
+}
+
+model WorkspaceMember {
+  id           String    @id @default(cuid())
+  userId       String
+  workspaceId  String
+  role         WorkspaceRole @default(MEMBER)
+  createdAt    DateTime @default(now())
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  @@unique([userId, workspaceId])
+}
+
+enum WorkspaceRole {
+  OWNER
+  ADMIN
+  MEMBER
+  ANALYST
+}
+
+model Plan {
+  id            String   @id @default(cuid())
+  name          String
+  featuresJson  Json
+  usageCapsJson Json
+  agencyOptions Json?
+  priceMonthly  Int
+  priceYearly   Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Subscription {
+  id            String   @id @default(cuid())
+  workspaceId   String
+  planId        String
+  driver        BillingDriver
+  externalIds   Json
+  status        SubscriptionStatus @default(INACTIVE)
+  periodEnd     DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  workspace     Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  plan          Plan      @relation(fields: [planId], references: [id])
+  invoices      Invoice[]
+}
+
+enum BillingDriver {
+  stripe
+  xendit
+  paypal
+  paddle
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  INACTIVE
+  PAST_DUE
+  CANCELED
+  TRIALING
+}
+
+model Invoice {
+  id             String   @id @default(cuid())
+  subscriptionId String
+  amount         Int
+  currency       String @default("usd")
+  issuedAt       DateTime @default(now())
+  paidAt         DateTime?
+  status         String
+  data           Json?
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+}
+
+// Contacts & Segments
+model Contact {
+  id            String   @id @default(cuid())
+  workspaceId   String
+  email         String
+  firstName     String?
+  lastName      String?
+  attributes    ContactAttribute[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  suppressed    Boolean  @default(false)
+  suppression   Suppression?
+  events        Event[]
+  engagement    EngagementScore?
+  sendTime      SendTimeProfile?
+  workspace     Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  @@unique([workspaceId, email])
+}
+
+model ContactAttribute {
+  id         String  @id @default(cuid())
+  contactId  String
+  key        String
+  value      String
+  contact    Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  @@index([key])
+}
+
+model Segment {
+  id           String   @id @default(cuid())
+  workspaceId  String
+  name         String
+  rulesJson    Json
+  dynamic      Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
+
+model Suppression {
+  contactId String @id
+  reason    String?
+  createdAt DateTime @default(now())
+  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+}
+
+// Campaigns & Events
+model Campaign {
+  id           String   @id @default(cuid())
+  workspaceId  String
+  name         String
+  subject      String
+  fromName     String
+  fromEmail    String
+  preheader    String?
+  status       CampaignStatus @default(DRAFT)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  variants     CampaignVariant[]
+  sends        CampaignSend[]
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  SENDING
+  SENT
+  PAUSED
+  CANCELED
+}
+
+model CampaignVariant {
+  id          String   @id @default(cuid())
+  campaignId  String
+  name        String
+  mjml        String?
+  html        String?
+  json        Json?
+  weight      Int      @default(50)
+  createdAt   DateTime @default(now())
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+model CampaignSend {
+  id          String   @id @default(cuid())
+  campaignId  String
+  variantId   String?
+  contactId   String
+  scheduledAt DateTime?
+  sentAt      DateTime?
+  providerId  String?
+  status      String   @default("queued")
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  variant     CampaignVariant? @relation(fields: [variantId], references: [id])
+  contact     Contact  @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  events      Event[]
+}
+
+enum EventType {
+  send
+  delivered
+  open
+  click
+  bounce
+  spam
+  unsub
+  purchase
+}
+
+model Event {
+  id           String   @id @default(cuid())
+  campaignSendId String?
+  contactId     String?
+  type         EventType
+  ts           DateTime @default(now())
+  meta         Json?
+  campaignSend CampaignSend? @relation(fields: [campaignSendId], references: [id], onDelete: Cascade)
+  contact      Contact? @relation(fields: [contactId], references: [id])
+  @@index([type, ts])
+}
+
+// Automation
+model Flow {
+  id           String   @id @default(cuid())
+  workspaceId  String
+  name         String
+  description  String?
+  isActive     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  nodes        FlowNode[]
+  runs         FlowRun[]
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
+
+model FlowNode {
+  id       String  @id @default(cuid())
+  flowId   String
+  kind     String   // trigger|action|condition|delay
+  config   Json
+  x        Int
+  y        Int
+  flow     Flow    @relation(fields: [flowId], references: [id], onDelete: Cascade)
+}
+
+model FlowRun {
+  id        String   @id @default(cuid())
+  flowId    String
+  contactId String?
+  status    String   @default("pending")
+  startedAt DateTime @default(now())
+  finishedAt DateTime?
+  flow      Flow     @relation(fields: [flowId], references: [id], onDelete: Cascade)
+  queue     FlowQueue?
+}
+
+model FlowQueue {
+  id        String   @id @default(cuid())
+  flowRunId String
+  runAt     DateTime
+  payload   Json?
+  flowRun   FlowRun  @relation(fields: [flowRunId], references: [id], onDelete: Cascade)
+}
+
+// Predictive / Feature Store
+model EngagementScore {
+  contactId String @id
+  score     Float  @default(0)
+  updatedAt DateTime @updatedAt
+  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+}
+
+model SendTimeProfile {
+  contactId String @id
+  hourOfDay Int    @default(9)
+  dayOfWeek Int    @default(2)
+  updatedAt DateTime @updatedAt
+  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+}
+
+model ForecastMetric {
+  id          String   @id @default(cuid())
+  workspaceId String
+  metric      String
+  period      String  // day|week|month
+  value       Float
+  ts          DateTime @default(now())
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  @@index([workspaceId, metric, period, ts])
+}
+
+// Deliverability / Compliance
+model Domain {
+  id           String   @id @default(cuid())
+  workspaceId  String
+  domain       String   @unique
+  spfValid     Boolean  @default(false)
+  dkimValid    Boolean  @default(false)
+  dmarcValid   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
+
+model AbuseReport {
+  id          String   @id @default(cuid())
+  workspaceId String
+  contactId   String?
+  reason      String?
+  createdAt   DateTime @default(now())
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  contact     Contact?  @relation(fields: [contactId], references: [id])
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  workspaceId String?
+  action      String
+  meta        Json?
+  ts          DateTime @default(now())
+  user        User?     @relation(fields: [userId], references: [id])
+  workspace   Workspace? @relation(fields: [workspaceId], references: [id])
+}
+
+// DevX
+model ApiKey {
+  id          String   @id @default(cuid())
+  userId      String
+  key         String   @unique
+  name        String
+  createdAt   DateTime @default(now())
+  lastUsedAt  DateTime?
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model WebhookEndpoint {
+  id           String   @id @default(cuid())
+  workspaceId  String
+  url          String
+  secret       String
+  isActive     Boolean @default(true)
+  createdAt    DateTime @default(now())
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
