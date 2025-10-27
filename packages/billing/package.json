@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "stripe": "^19.1.0",
-    "xendit-node": "^5.2.0",
+    "xendit-node": "^7.0.0",
     "@paypal/checkout-server-sdk": "^1.0.3",
     "@paddle/paddle-node-sdk": "^1.8.0",
     "axios": "^1.7.4",

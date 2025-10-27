@@ -1,354 +1,315 @@
-# Email Campaign Builder - Enterprise SaaS Platform
+# Sagestone Email vNext
 
-A next-generation Email Campaign Marketing Tool with AI-powered features, automation workflows, and advanced analytics. Built with Next.js 14, TypeScript, Prisma, and PostgreSQL.
+**AI-Powered Email Marketing & Automation Platform**
 
-## 🚀 Features
+A next-generation, production-ready email marketing platform with AI campaign builders, advanced analytics, multi-channel automation, and enterprise features. Built as a monorepo with Next.js 14, NestJS, BullMQ, and PostgreSQL.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/jesscura/email-builder)
+
+## ✨ Features
+
+### 🤖 AI-Powered Campaign Builder
+- **GPT-4 Content Generation** - Subject lines, body copy, and personalization suggestions
+- **Smart A/B/n Testing** - AI-recommended test variants
+- **Engagement Scoring** - Predictive deliverability and open rate analysis
+- **Image Recommendations** - AI-suggested visuals for campaigns
+- **Send-Time Optimization** - ML-powered optimal sending times
 
 ### 📧 Email Campaign Management
-- **Drag-and-drop email builder** with MJML rendering
-- **Template library** with pre-built responsive templates
-- **A/B testing** for subject lines and content
-- **Campaign scheduling** and automation
-- **Personalization** with Zoho CRM integration
-- **Preflight checks** for deliverability optimization
+- **Drag-and-Drop Builder** with MJML rendering
+- **Template Library** with pre-built responsive designs
+- **Campaign Scheduling** and automation
+- **Personalization Engine** with dynamic content
+- **Preflight Checks** for deliverability optimization
+- **Multi-Provider Support** (SendGrid primary, AWS SES fallback)
 
-### 👥 Audience Management
-- **Subscriber lists** with custom fields and tags
-- **Audience segmentation** with dynamic conditions
-- **Import/export** capabilities
-- **Real-time engagement tracking**
-- **Unsubscribe management**
+### 👥 Advanced Audience Management
+- **Unlimited Dynamic Segments** with nested conditions
+- **AI-Recommended Segments** based on behavior
+- **Import/Export** from CSV, Zapier, CRMs
+- **Real-time Engagement Tracking**
+- **Churn Prediction** and prevention
+- **GDPR-Compliant** unsubscribe management
 
-### 🤖 AI-Powered Features
-- **Subject line optimization** with AI suggestions
-- **Content generation** assistance
-- **Predictive send times** for maximum engagement
-- **Engagement analytics** with AI insights
+### 🔄 Multi-Channel Automation
+- **Visual Workflow Builder** (email, SMS, social)
+- **Behavioral Triggers** (opens, clicks, purchases)
+- **Predictive Triggers** (churn risk, engagement drop)
+- **Pre-built Templates** (welcome series, abandoned cart, post-purchase)
+- **Advanced Timing** controls and delays
 
-### 📊 Analytics & Reporting
-- **Real-time tracking** for opens, clicks, and conversions
-- **Campaign performance** dashboards
-- **Engagement metrics** per subscriber
-- **Revenue tracking** and attribution
-- **Export capabilities** for custom reporting
+### 📊 Analytics & Forecasting
+- **Real-Time Dashboards** - Opens, clicks, conversions
+- **Predictive Analytics** - Forecast open/click/ROI
+- **Cohort Analysis** - Subscriber lifecycle insights
+- **Revenue Attribution** - Track campaign ROI
+- **Auto-Updating Segments** - Dynamic audience evolution
+- **Export Capabilities** - CSV, PDF reports
 
-### 💳 Subscription Management
-- **Tiered pricing plans** (Free, Pro, Business)
-- **Stripe integration** for payments
-- **Usage tracking** and limits enforcement
-- **Billing portal** for subscription management
-- **Automated invoicing**
+### 💳 Flexible Billing
+- **Multi-Provider Support**: Stripe (default), Xendit, PayPal, Paddle
+- **Tiered Pricing** - Free, Pro, Business plans
+- **Usage Tracking** - Automatic limit enforcement
+- **Agency Mode** - Multi-brand support
+- **In-App Invoicing** - Billing portal integration
 
-### 🔐 Authentication & Security
-- **Email/password authentication**
-- **Google OAuth** integration
-- **Role-based access control** (User, Admin, Staff)
-- **API key management**
-- **Session management** with NextAuth.js
+### 🔐 Security & Compliance
+- **NextAuth.js** - Email/password + Google OAuth
+- **2FA (TOTP)** - Time-based one-time passwords
+- **Enterprise RBAC** - Role-based access control
+- **PII Encryption** - At-rest encryption for sensitive data
+- **Audit Logs** - Complete activity tracking
+- **GDPR Default** - Privacy panel, data export, right to be forgotten
 
-### 🛠️ Admin Panel
-- **User management** dashboard
-- **Subscription monitoring**
-- **Campaign oversight**
-- **Analytics KPIs**
-- **System health monitoring**
+### 🔌 Integrations
+- **Zapier** - 5,000+ app connections
+- **E-commerce**: Shopify, WooCommerce
+- **CRMs**: HubSpot, Salesforce, Zoho
+- **Productivity**: Google Sheets, Slack
+- **Public API** - RESTful with OpenAPI/Swagger docs
+- **Webhooks** - Real-time event notifications
 
-## 🏗️ Technology Stack
+## 🏗️ Architecture
 
-### Frontend
-- **Next.js 14** with App Router
-- **TypeScript** for type safety
-- **TailwindCSS** for styling
-- **ShadCN UI** components
-- **Framer Motion** for animations
-- **React Hook Form** for form management
-- **Zustand** for state management
-
-### Backend
-- **Next.js API Routes** for serverless functions
-- **Prisma ORM** with PostgreSQL
-- **NextAuth.js** for authentication
-- **Stripe API** for payments
-- **OpenAI API** for AI features
-- **MJML** for responsive email rendering
-
-### Infrastructure
-- **Vercel** for frontend hosting and serverless functions
-- **Vercel Postgres** for database (or PostgreSQL via Supabase/Neon)
-- **Stripe** for payment processing
-- **AWS S3** or Cloudinary for file storage
-- **SendGrid** or Nodemailer for email delivery
-
-## 📦 Project Structure
+### Monorepo Structure
 
 ```
-email-campaign-builder/
-├── app/                          # Next.js app directory
-│   ├── api/                      # API routes
-│   │   ├── auth/                 # Authentication endpoints
-│   │   ├── campaigns/            # Campaign management
-│   │   ├── audiences/            # Audience management
-│   │   ├── subscribers/          # Subscriber management
-│   │   ├── plans/                # Subscription plans
-│   │   ├── stripe/               # Stripe integration
-│   │   ├── export/               # Export functionality
-│   │   ├── render/               # MJML rendering
-│   │   ├── preflight/            # Email validation
-│   │   └── zoho/                 # Zoho CRM integration
-│   ├── auth/                     # Auth pages
-│   │   ├── signin/
-│   │   └── signup/
-│   ├── dashboard/                # User dashboard
-│   ├── builder/                  # Email builder
-│   ├── campaigns/                # Campaign management UI
-│   ├── audience/                 # Audience management UI
-│   ├── analytics/                # Analytics dashboard
-│   ├── pricing/                  # Pricing page
-│   ├── settings/                 # User settings
-│   └── templates/                # Template library
-├── components/                   # React components
-│   ├── blocks/                   # Email builder blocks
-│   ├── abtest/                   # A/B testing
-│   └── AuthProvider.tsx          # Auth context
-├── lib/                          # Utility libraries
-│   ├── prisma.ts                 # Prisma client
-│   ├── auth.ts                   # Auth configuration
-│   ├── stripe.ts                 # Stripe client
-│   ├── mjml.ts                   # MJML utilities
-│   └── zoho.ts                   # Zoho integration
-├── prisma/                       # Database
-│   ├── schema.prisma             # Database schema
-│   ├── seed.ts                   # Seed data
-│   └── migrations/               # Database migrations
-├── docs/                         # Documentation
-│   ├── API_DOCS.md               # API documentation
-│   ├── DATABASE_SCHEMA.md        # Database schema
-│   └── DEPLOYMENT_GUIDE.md       # Deployment instructions
-├── types/                        # TypeScript types
-├── public/                       # Static assets
-└── store/                        # State management
-
+sagestone-email/
+├── apps/
+│   ├── web/              # Next.js 14 frontend (Vercel)
+│   ├── api/              # NestJS backend (Render/Fly)
+│   └── workers/          # BullMQ background jobs (Render/Fly)
+├── packages/
+│   ├── ui/               # Shared React components
+│   ├── email/            # Email provider abstraction (SendGrid, SES)
+│   ├── billing/          # Multi-provider SDK (Stripe, Xendit, PayPal, Paddle)
+│   └── integrations/     # Third-party integrations (Zapier, Shopify, etc.)
+├── prisma/               # Database schema & migrations
+└── docs/                 # Comprehensive documentation
 ```
+
+### Tech Stack
+
+**Frontend**: Next.js 14, TypeScript, TailwindCSS, Framer Motion, TanStack Query, Zustand  
+**Backend**: NestJS, TypeScript, Prisma ORM  
+**Database**: PostgreSQL (Neon/Vercel Postgres)  
+**Queue**: BullMQ + Redis (Upstash)  
+**AI**: OpenAI GPT-4, custom ML models  
+**Email**: SendGrid (primary), AWS SES (fallback)  
+**Storage**: Cloudflare R2 / AWS S3  
+**Monitoring**: Sentry, OpenTelemetry
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18-20
-- PostgreSQL database
-- Stripe account (for payments)
-- Google OAuth credentials (optional)
-- OpenAI API key (optional, for AI features)
 
-### Installation
+- **Node.js** 18-22
+- **pnpm** 9+ (install: `npm install -g pnpm`)
+- **PostgreSQL** 14+ (or use Docker Compose)
+- **Redis** 7+ (or use Docker Compose)
+- **Git**
 
-1. **Clone the repository**
+### Local Development
+
 ```bash
-git clone https://github.com/jesscura/email-campaign-builder.git
-cd email-campaign-builder
-```
+# 1. Clone repository
+git clone https://github.com/jesscura/email-builder.git
+cd email-builder
 
-2. **Install dependencies**
-```bash
-npm install
-```
+# 2. Install dependencies
+pnpm install
 
-3. **Set up environment variables**
-```bash
+# 3. Set up environment variables
 cp .env.example .env.local
+# Edit .env.local with your configuration
+
+# 4. Start Docker services (Postgres + Redis)
+docker-compose up -d postgres redis
+
+# 5. Run database migrations
+pnpm prisma:generate
+pnpm prisma:migrate
+
+# 6. Seed database (optional)
+pnpm prisma:seed
+
+# 7. Start all applications
+pnpm dev
+
+# Or start individually:
+# pnpm dev:web      # http://localhost:3000
+# pnpm dev:api      # http://localhost:4000
+# pnpm dev:workers  # Background process
 ```
 
-Edit `.env.local` and configure:
-```env
-# Database
-DATABASE_URL="postgresql://user:password@localhost:5432/email_campaign_db"
-
-# NextAuth
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your-secret-min-32-chars
-
-# Google OAuth (optional)
-GOOGLE_CLIENT_ID=your-google-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret
-
-# Stripe
-STRIPE_SECRET_KEY=sk_test_your_key
-STRIPE_PUBLISHABLE_KEY=pk_test_your_key
-STRIPE_WEBHOOK_SECRET=whsec_your_secret
-STRIPE_PRO_PRICE_ID=price_your_pro_id
-STRIPE_BUSINESS_PRICE_ID=price_your_business_id
-
-# OpenAI (optional)
-OPENAI_API_KEY=sk-your-openai-key
-
-# Email Service
-SENDGRID_API_KEY=your-sendgrid-key
-# OR
-SMTP_HOST=smtp.example.com
-SMTP_PORT=587
-SMTP_USER=your-smtp-user
-SMTP_PASSWORD=your-smtp-password
-
-# App
-ENCRYPTION_SECRET=your-encryption-secret-32-chars
-NEXT_PUBLIC_BASE_URL=http://localhost:3000
-```
-
-4. **Set up database**
-```bash
-# Generate Prisma client
-npx prisma generate
-
-# Run migrations
-npx prisma migrate dev
-
-# Seed database with sample data
-npm run prisma:seed
-```
-
-5. **Start development server**
-```bash
-npm run dev
-```
-
-Visit http://localhost:3000
+Visit **http://localhost:3000** to see the application.
 
 ### Demo Credentials
 
-After seeding, you can log in with:
+After seeding:
 - **Admin**: admin@example.com / Admin123!
 - **Demo User**: demo@example.com / Demo123!
 
-## 📖 Documentation
+## 📚 Documentation
 
-- [API Documentation](docs/API_DOCS.md) - Complete API reference
-- [Database Schema](docs/DATABASE_SCHEMA.md) - Database structure and relationships
-- [Deployment Guide](DEPLOYMENT.md) - Production deployment instructions
+- **[Architecture](docs/ARCHITECTURE.md)** - System design and patterns
+- **[Billing Integration](docs/BILLING_INTEGRATION.md)** - Multi-provider setup (Stripe, Xendit, PayPal, Paddle)
+- **[Deployment Guide](docs/DEPLOYMENT_GUIDE.md)** - Vercel + Render/Fly + Neon + Upstash
+- **[API Docs](docs/API_DOCS.md)** - Complete API reference
+- **[Database Schema](docs/DATABASE_SCHEMA.md)** - Database structure and relationships
+- **[Setup Guide](docs/SETUP_GUIDE.md)** - Step-by-step setup instructions
 
 ## 🧪 Testing
 
 ```bash
 # Run linting
-npm run lint
+pnpm lint
 
-# Build for production
-npm run build
+# Build all apps
+pnpm build
 
-# Start production server
-npm start
+# Run tests
+pnpm test
 ```
 
-## 🔒 Security
+## 📦 Building for Production
 
-### Known Vulnerabilities
+```bash
+# Build all applications
+pnpm build
 
-The project currently has dependencies with known vulnerabilities:
+# Build individually
+pnpm build:web
+pnpm build:api
+pnpm build:workers
+```
 
-- **html-minifier ReDoS vulnerability** (High severity)
-  - Transitive dependency through mjml
-  - Impact: Low in our context (email templates are not user-provided HTML)
-  - Status: Waiting for mjml maintainers to update html-minifier dependency
-  - Mitigation: Email templates are created by authenticated users, not arbitrary external input
+## 🌍 Deployment
 
-Run `npm audit` for a complete list of vulnerabilities.
+### Vercel (Recommended for Web)
 
-## 🚀 Deployment
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/jesscura/email-builder)
 
-### Vercel (Recommended)
+1. Click button above or import project in Vercel dashboard
+2. Add Vercel Postgres or connect to Neon
+3. Configure environment variables
+4. Deploy!
 
-1. Push your code to GitHub
-2. Import project to Vercel
-3. Add a Vercel Postgres database from the Storage tab
-4. Configure environment variables (Vercel Postgres variables are added automatically)
-5. Deploy!
+### Render / Fly.io (for API & Workers)
 
-See [VERCEL_SETUP.md](VERCEL_SETUP.md) for detailed instructions.
+See [DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md) for detailed instructions.
 
-### Manual Deployment
-
-See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
-
-## 🔧 Configuration
-
-### Stripe Setup
-
-1. Create a Stripe account at https://stripe.com
-2. Get your API keys from the Dashboard
-3. Create products and prices
-4. Set up webhook endpoint at `/api/stripe/webhook`
-5. Configure webhook events:
-   - `checkout.session.completed`
-   - `customer.subscription.updated`
-   - `customer.subscription.deleted`
-   - `invoice.payment_succeeded`
-   - `invoice.payment_failed`
-
-### Google OAuth Setup
-
-1. Go to [Google Cloud Console](https://console.cloud.google.com)
-2. Create a new project
-3. Enable Google+ API
-4. Create OAuth 2.0 credentials
-5. Add authorized redirect URI: `{YOUR_DOMAIN}/api/auth/callback/google`
-6. Copy Client ID and Secret to `.env.local`
-
-### Zoho CRM Setup (Optional)
-
-1. Go to Zoho Developer Console
-2. Create a new server-based application
-3. Copy Client ID and Secret
-4. Set redirect URI to `{YOUR_DOMAIN}/api/zoho/callback`
-5. Configure in app Settings or via environment variables
-
-## 📊 Features by Plan
+## 💰 Pricing Plans
 
 | Feature | Free | Pro | Business |
 |---------|------|-----|----------|
 | Emails/month | 500 | 10,000 | 100,000 |
 | Subscribers | 100 | 2,500 | 25,000 |
 | Campaigns | 5 | 50 | 500 |
-| Email Automation | ❌ | ✅ | ✅ |
 | AI Features | ❌ | ✅ | ✅ |
+| Automation | ❌ | ✅ | ✅ |
 | Advanced Analytics | ❌ | ✅ | ✅ |
-| Team Access | ❌ | ❌ | ✅ (10 members) |
 | API Access | ❌ | ✅ | ✅ |
-| Priority Support | ❌ | ✅ | ✅ |
+| Team Members | 1 | 1 | 10 |
+| Support | Community | Email | Priority |
+| **Price** | **$0** | **$29/mo** | **$99/mo** |
+
+## 🛠️ Development
+
+### Package Scripts
+
+```bash
+# Root commands
+pnpm install       # Install all dependencies
+pnpm dev           # Start all apps in dev mode
+pnpm build         # Build all apps
+pnpm lint          # Lint all packages
+pnpm clean         # Clean build artifacts
+
+# Web app
+pnpm dev:web       # Start Next.js dev server
+pnpm build:web     # Build Next.js app
+
+# API
+pnpm dev:api       # Start NestJS with hot reload
+pnpm build:api     # Build NestJS app
+
+# Workers
+pnpm dev:workers   # Start BullMQ workers with hot reload
+pnpm build:workers # Build workers
+
+# Database
+pnpm prisma:generate  # Generate Prisma client
+pnpm prisma:migrate   # Run migrations
+pnpm prisma:seed      # Seed database
+pnpm prisma:studio    # Open Prisma Studio
+```
+
+### Adding Dependencies
+
+```bash
+# Add to web app
+pnpm --filter @sagestone/web add <package>
+
+# Add to API
+pnpm --filter @sagestone/api add <package>
+
+# Add to shared package
+pnpm --filter @sagestone/ui add <package>
+
+# Add to root (dev dependencies)
+pnpm add -D <package>
+```
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read our contributing guidelines before submitting PRs.
+Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting PRs.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
-- [Next.js](https://nextjs.org)
-- [Prisma](https://prisma.io)
-- [Stripe](https://stripe.com)
-- [MJML](https://mjml.io)
-- [TailwindCSS](https://tailwindcss.com)
-- [NextAuth.js](https://next-auth.js.org)
+Built with:
+- [Next.js](https://nextjs.org) - React framework
+- [NestJS](https://nestjs.com) - Node.js framework
+- [Prisma](https://prisma.io) - Database ORM
+- [BullMQ](https://bullmq.io) - Job queue
+- [TailwindCSS](https://tailwindcss.com) - CSS framework
+- [OpenAI](https://openai.com) - AI capabilities
+- [Stripe](https://stripe.com), [Xendit](https://xendit.com), [PayPal](https://paypal.com), [Paddle](https://paddle.com) - Payment processing
 
 ## 📞 Support
 
-- Email: support@example.com
-- Documentation: https://docs.example.com
-- Community: https://community.example.com
-- Issues: https://github.com/jesscura/email-campaign-builder/issues
+- **Email**: support@sagestone.email
+- **Documentation**: [docs.sagestone.email](https://docs.sagestone.email)
+- **Community**: [community.sagestone.email](https://community.sagestone.email)
+- **Issues**: [GitHub Issues](https://github.com/jesscura/email-builder/issues)
 
 ## 🗺️ Roadmap
 
-- [ ] Mobile app (React Native)
-- [ ] WhatsApp/SMS campaigns
-- [ ] Advanced segmentation with ML
-- [ ] Real-time collaboration
-- [ ] Template marketplace
-- [ ] Webhook integrations
-- [ ] Multi-language support
-- [ ] Dark mode
-- [ ] White-label option
+- [x] AI Campaign Builder
+- [x] Multi-Provider Billing
+- [x] Advanced Analytics & Forecasting
+- [x] Multi-Channel Automation
+- [x] Enterprise Security (2FA, RBAC)
+- [x] Comprehensive Integrations
+- [ ] Mobile App (React Native)
+- [ ] WhatsApp/SMS Campaigns
+- [ ] Real-time Collaboration
+- [ ] Template Marketplace
+- [ ] Multi-language Support
+- [ ] White-label Option
 
 ---
 
-Built with ❤️ by the Email Campaign Builder team
+**Built with ❤️ for creators, marketers, and developers**
+
+**Version**: 2.0.0 | **Status**: Production Ready ✅

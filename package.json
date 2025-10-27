@@ -16,9 +16,9 @@
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",
     "clean": "pnpm -r clean && rm -rf node_modules",
-    "prisma:generate": "cd prisma && prisma generate",
-    "prisma:migrate": "cd prisma && prisma migrate dev",
-    "prisma:seed": "cd prisma && ts-node --compiler-options '{\"module\":\"CommonJS\"}' seed.ts",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seed.ts",
     "prisma:studio": "cd prisma && prisma studio",
     "migrate:deploy": "cd prisma && prisma migrate deploy",
     "docker:up": "docker-compose up -d",
@@ -29,12 +29,14 @@
     "apps/*",
     "packages/*"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "@prisma/client": "^6.18.0"
+  },
   "devDependencies": {
     "@types/node": "^22.8.6",
-    "typescript": "^5.6.3",
+    "prisma": "^6.18.0",
     "ts-node": "^10.9.2",
-    "prisma": "^6.18.0"
+    "typescript": "^5.6.3"
   },
   "engines": {
     "node": ">=18 <23"
