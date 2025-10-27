@@ -1,14 +1,107 @@
 version: "3.9"
 services:
-  email-campaign-builder:
-    build: .
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: sagestone-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: sagestone_email_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis (for BullMQ workers)
+  redis:
+    image: redis:7-alpine
+    container_name: sagestone-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Next.js Web App
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sagestone-web
+    restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
+      DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/sagestone_email_db?schema=public"
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      NEXTAUTH_URL: "http://localhost:3000"
+      NEXTAUTH_SECRET: "change-this-32-characters-min-dev-secret"
+      ENCRYPTION_SECRET: "change-this-32-characters-min-dev-secret"
       NEXT_PUBLIC_BASE_URL: "http://localhost:3000"
-      ENCRYPTION_SECRET: "change-this-32-characters-min"
-      # Optional real Zoho:
-      # ZOHO_CLIENT_ID: ""
-      # ZOHO_CLIENT_SECRET: ""
-      # ZOHO_REDIRECT_URI: "http://localhost:3000/api/zoho/callback"
-      # ZOHO_BASE_URL: "https://accounts.zoho.com"
+      NEXT_PUBLIC_APP_NAME: "Sagestone Email"
+      NODE_ENV: development
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./apps/web:/app/apps/web
+      - /app/node_modules
+      - /app/apps/web/node_modules
+
+  # NestJS API Server
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: sagestone-api
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/sagestone_email_db?schema=public"
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      PORT: 4000
+      NODE_ENV: development
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # BullMQ Workers
+  workers:
+    build:
+      context: ./apps/workers
+      dockerfile: Dockerfile
+    container_name: sagestone-workers
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/sagestone_email_db?schema=public"
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      NODE_ENV: development
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  redis_data:

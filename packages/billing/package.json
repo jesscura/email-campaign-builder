@@ -1,0 +1,24 @@
+{
+  "name": "@sagestone/billing",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Sagestone Email vNext - Unified Billing SDK (Stripe, Xendit, PayPal, Paddle)",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "lint": "eslint src --ext .ts",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "stripe": "^19.1.0",
+    "xendit-node": "^7.0.0",
+    "@paypal/checkout-server-sdk": "^1.0.3",
+    "@paddle/paddle-node-sdk": "^1.8.0",
+    "axios": "^1.7.4",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.8.6",
+    "typescript": "^5.6.3"
+  }
+}
