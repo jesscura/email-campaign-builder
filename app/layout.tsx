@@ -2,6 +2,7 @@ import './globals.css'
 import { ReactNode } from 'react'
 import { Toaster } from 'sonner'
 import { AuthProvider } from '@/components/AuthProvider'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 export const metadata = {
   title: 'SageStone - Email Marketing Platform',
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           </div>
         </AuthProvider>
       </body>
+      <SpeedInsights />
     </html>
   )
 }
