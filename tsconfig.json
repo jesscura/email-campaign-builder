@@ -41,6 +41,7 @@
     "node_modules",
     "apps/api",
     "apps/web",
-    "apps/workers"
+    "apps/workers",
+    "packages/**"
   ]
 }

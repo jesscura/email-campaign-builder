@@ -5,6 +5,7 @@
   "description": "AI-powered email marketing and automation platform - monorepo",
   "scripts": {
     "dev": "next dev",
+    "prebuild": "prisma generate",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -27,7 +28,8 @@
     "migrate:deploy": "cd prisma && prisma migrate deploy",
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
-    "setup": "pnpm install && pnpm prisma:generate && pnpm prisma:migrate"
+    "setup": "pnpm install && pnpm prisma:generate && pnpm prisma:migrate",
+    "postinstall": "prisma generate"
   },
   "workspaces": [
     "apps/*",
