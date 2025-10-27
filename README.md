@@ -73,8 +73,8 @@ A next-generation Email Campaign Marketing Tool with AI-powered features, automa
 - **MJML** for responsive email rendering
 
 ### Infrastructure
-- **Vercel** for frontend hosting
-- **PostgreSQL** database (Supabase/Neon)
+- **Vercel** for frontend hosting and serverless functions
+- **Vercel Postgres** for database (or PostgreSQL via Supabase/Neon)
 - **Stripe** for payment processing
 - **AWS S3** or Cloudinary for file storage
 - **SendGrid** or Nodemailer for email delivery
@@ -243,8 +243,11 @@ npm start
 
 1. Push your code to GitHub
 2. Import project to Vercel
-3. Configure environment variables
-4. Deploy!
+3. Add a Vercel Postgres database from the Storage tab
+4. Configure environment variables (Vercel Postgres variables are added automatically)
+5. Deploy!
+
+See [VERCEL_SETUP.md](VERCEL_SETUP.md) for detailed instructions.
 
 ### Manual Deployment
 

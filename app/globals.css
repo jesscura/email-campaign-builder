@@ -5,3 +5,9 @@
 :root {
   color-scheme: light;
 }
+
+@layer base {
+  body {
+    @apply bg-white;
+  }
+}
