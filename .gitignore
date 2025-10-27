@@ -38,3 +38,4 @@ tsconfig.tsbuildinfo
 .vercel
 .turbo
 *.tsbuildinfo
+apps/web/.next/
