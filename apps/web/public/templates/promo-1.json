@@ -1,0 +1,15 @@
+{
+  "subject": "Ends soon: 20% off for {{Leads.First_Name}}",
+  "preheader": "Your exclusive code is inside.",
+  "fromName": "Your Brand",
+  "fromEmail": "deals@example.com",
+  "theme": { "primaryColor": "#b91c1c", "backgroundColor": "#ffffff", "textColor": "#0b0f19" },
+  "blocks": [
+    { "id": "b1", "type": "image", "data": { "src": "https://via.placeholder.com/1200x420?text=Promo", "alt": "Promo" } },
+    { "id": "b2", "type": "text", "data": { "html": "<h2>Save 20% today</h2><p>Use code: SAVE20</p>" } },
+    { "id": "b3", "type": "button", "data": { "label": "Shop now", "href": "https://example.com/sale?utm_source=newsletter&utm_medium=email&utm_campaign=promo" } },
+    { "id": "b4", "type": "divider", "data": {} },
+    { "id": "b5", "type": "social", "data": { "links": [{ "platform": "Facebook", "url": "https://facebook.com/your" }] } }
+  ],
+  "abTest": { "variantA": { "subject": "Last chance: 20% off" }, "variantB": { "subject": "Today only: 20% off for you" } }
+}

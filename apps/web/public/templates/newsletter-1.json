@@ -1,0 +1,14 @@
+{
+  "subject": "This week’s insights for {{Leads.First_Name}}",
+  "preheader": "Top stories picked for you.",
+  "fromName": "Your Brand",
+  "fromEmail": "news@example.com",
+  "theme": { "primaryColor": "#1d4ed8", "backgroundColor": "#ffffff", "textColor": "#0b0f19" },
+  "blocks": [
+    { "id": "b1", "type": "text", "data": { "html": "<h2>Editor’s note</h2><p>Thanks for reading!</p>" } },
+    { "id": "b2", "type": "two_column", "data": { "leftHtml": "<h3>Story 1</h3><p>Summary...</p>", "rightHtml": "<h3>Story 2</h3><p>Summary...</p>" } },
+    { "id": "b3", "type": "divider", "data": {} },
+    { "id": "b4", "type": "button", "data": { "label": "Read more", "href": "https://example.com/news?utm_source=newsletter&utm_medium=email&utm_campaign=weekly" } }
+  ],
+  "abTest": { "variantA": { "subject": "Your weekly brief, {{Leads.First_Name}}" }, "variantB": { "subject": "Don’t miss these picks, {{Leads.First_Name}}" } }
+}

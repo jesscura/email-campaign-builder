@@ -1,0 +1,26 @@
+[
+  {
+    "id": "welcome-1",
+    "name": "Welcome Series — Hero + CTA",
+    "tags": ["welcome", "ecommerce", "hero"],
+    "industry": "ecommerce",
+    "thumbnail": "https://via.placeholder.com/480x300?text=Welcome",
+    "file": "welcome-1.json"
+  },
+  {
+    "id": "newsletter-1",
+    "name": "Editorial Newsletter — Two Column",
+    "tags": ["newsletter", "editorial", "two-column"],
+    "industry": "media",
+    "thumbnail": "https://via.placeholder.com/480x300?text=Newsletter",
+    "file": "newsletter-1.json"
+  },
+  {
+    "id": "promo-1",
+    "name": "Promotion — Bold CTA",
+    "tags": ["promotion", "sale", "cta"],
+    "industry": "general",
+    "thumbnail": "https://via.placeholder.com/480x300?text=Promo",
+    "file": "promo-1.json"
+  }
+]
