@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import tinycolor from 'tinycolor2'
 import { Campaign } from '@/store/campaign'
+import prisma from '@/lib/prisma'
 
 const spamWords = ['free', 'winner', 'guarantee', 'act now', 'urgent', 'prize', 'risk-free', 'best price']
 const ctaRegex = /(call to action|shop now|buy now|learn more|get started|signup|sign up|subscribe)/i
@@ -84,4 +85,52 @@ export async function POST(req: NextRequest) {
   })
 
   return NextResponse.json({ checks })
+}
+
+// Lightweight runtime readiness check for post-deploy validation
+export async function GET() {
+  const requiredEnv = [
+    'DATABASE_URL',
+    'NEXTAUTH_URL',
+    'NEXTAUTH_SECRET',
+    'ENCRYPTION_SECRET',
+    'NEXT_PUBLIC_BASE_URL',
+  ] as const
+
+  const missing = requiredEnv.filter((k) => !process.env[k])
+
+  let dbOk = false
+  let dbError: string | undefined
+  try {
+    // Simple connectivity probe; will throw if DATABASE_URL is misconfigured
+    await prisma.$queryRaw`SELECT 1` as any
+    dbOk = true
+  } catch (err: any) {
+    dbOk = false
+    dbError = err?.message?.slice(0, 300) || 'Unknown database error'
+  }
+
+  const externalApiConfigured = !!process.env.NEXT_PUBLIC_API_URL
+
+  return NextResponse.json({
+    ok: missing.length === 0 && dbOk,
+    env: {
+      missing,
+      present: requiredEnv.filter((k) => !missing.includes(k as any)),
+    },
+    db: {
+      ok: dbOk,
+      error: dbError,
+    },
+    api: {
+      externalConfigured: externalApiConfigured,
+      baseUrl: externalApiConfigured ? process.env.NEXT_PUBLIC_API_URL : null,
+    },
+    runtime: {
+      node: process.version,
+      environment: process.env.NODE_ENV,
+      vercel: !!process.env.VERCEL,
+      region: process.env.VERCEL_REGION || null,
+    },
+  })
 }
