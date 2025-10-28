@@ -35,8 +35,7 @@
     "start:api:npm": "npm run -w @sagestone/api start"
   },
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "apps/api"
   ],
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
@@ -45,9 +44,7 @@
     "@dnd-kit/sortable": "^8.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@prisma/client": "^6.18.0",
-    "@sagestone/billing": "workspace:*",
-    "@sagestone/email": "workspace:*",
-    "@sagestone/ui": "workspace:*",
+    
     "@tanstack/react-query": "^5.62.11",
     "@vercel/speed-insights": "^1.2.0",
     "axios": "^1.7.4",
