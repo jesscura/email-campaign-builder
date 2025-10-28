@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: sagestone-email-api
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: |
+      corepack enable
+      pnpm install --frozen-lockfile
+      pnpm prisma:generate
+      pnpm --filter @sagestone/api build
+    startCommand: node sagestone-email/apps/api/dist/main.js
+    autoDeploy: true
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: DATABASE_URL
+        sync: false

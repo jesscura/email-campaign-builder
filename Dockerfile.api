@@ -1,0 +1,35 @@
+FROM node:20-alpine AS base
+WORKDIR /app
+
+# Enable Corepack (pnpm)
+RUN corepack enable
+
+# Copy root manifests
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+
+# Copy monorepo sources needed for API build
+COPY sagestone-email ./sagestone-email
+COPY prisma ./prisma
+
+# Install dependencies (workspace-aware)
+RUN pnpm install --frozen-lockfile
+
+# Generate Prisma Client
+RUN pnpm prisma:generate
+
+# Build the NestJS API
+RUN pnpm --filter @sagestone/api build
+
+# --- Runtime image ---
+FROM node:20-alpine AS runtime
+WORKDIR /app
+ENV NODE_ENV=production
+ENV PORT=4000
+
+# Copy node_modules for runtime and built artifacts
+COPY --from=base /app/node_modules ./node_modules
+COPY --from=base /app/sagestone-email/apps/api/dist ./sagestone-email/apps/api/dist
+COPY --from=base /app/prisma ./prisma
+
+EXPOSE 4000
+CMD ["node", "sagestone-email/apps/api/dist/main.js"]
