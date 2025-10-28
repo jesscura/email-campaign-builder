@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { apiConfigured } from '@/lib/api-client'
 import { useSession } from 'next-auth/react'
 
 export default function AnalyticsPage() {
@@ -11,6 +12,19 @@ export default function AnalyticsPage() {
     return (
       <div className="max-w-7xl mx-auto px-4 py-16">
         <p className="text-center text-gray-600">Please sign in to view analytics.</p>
+      </div>
+    )
+  }
+
+  if (!apiConfigured) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-16">
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-6">
+          <h2 className="text-lg font-semibold text-amber-800">API not configured</h2>
+          <p className="mt-2 text-amber-700">
+            Set <code className="font-mono">NEXT_PUBLIC_API_URL</code> in your environment to enable analytics.
+          </p>
+        </div>
       </div>
     )
   }

@@ -195,6 +195,24 @@ pnpm build:workers
 3. Configure environment variables
 4. Deploy!
 
+#### Quick Checklist (Production)
+
+- Project → Git
+	- Production Branch: `main`
+	- Root Directory: repo root (leave blank)
+- Project → Environment Variables
+	- `DATABASE_URL` = value of `POSTGRES_PRISMA_URL` (from Vercel Postgres)
+	- `POSTGRES_URL_NON_POOLING` = value from Vercel Postgres
+	- `NEXTAUTH_URL` = https://YOUR-PROJECT.vercel.app
+	- `NEXTAUTH_SECRET` = a 32+ char random secret
+	- `ENCRYPTION_SECRET` = a 32+ char random secret
+	- `NEXT_PUBLIC_BASE_URL` = https://YOUR-PROJECT.vercel.app
+	- `NEXT_PUBLIC_API_URL` = https://your-api-host.example.com (host your NestJS API separately)
+- Deployments → Redeploy
+	- If you don’t see changes, "Clear build cache & redeploy"
+
+Note: If `NEXT_PUBLIC_API_URL` isn’t set in production, API-backed pages (Campaigns, Audiences, Analytics) will render a helpful notice instead of failing.
+
 ### Render / Fly.io (for API & Workers)
 
 See [DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md) for detailed instructions.

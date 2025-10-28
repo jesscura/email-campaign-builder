@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
-import { contactsApi } from '@/lib/api-client'
+import { contactsApi, apiConfigured } from '@/lib/api-client'
 
 interface ContactStats {
   total: number
@@ -21,7 +21,7 @@ export default function AudiencesPage() {
   const workspaceId = 'demo-workspace-id'
 
   useEffect(() => {
-    if (!session) return
+    if (!session || !apiConfigured) return
 
     const fetchStats = async () => {
       try {
@@ -43,6 +43,19 @@ export default function AudiencesPage() {
     return (
       <div className="max-w-7xl mx-auto px-4 py-16">
         <p className="text-center text-gray-600">Please sign in to view audiences.</p>
+      </div>
+    )
+  }
+
+  if (!apiConfigured) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-16">
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-6">
+          <h2 className="text-lg font-semibold text-amber-800">API not configured</h2>
+          <p className="mt-2 text-amber-700">
+            Set <code className="font-mono">NEXT_PUBLIC_API_URL</code> in your environment to enable audiences.
+          </p>
+        </div>
       </div>
     )
   }

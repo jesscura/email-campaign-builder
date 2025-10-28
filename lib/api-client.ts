@@ -1,9 +1,16 @@
 import axios from 'axios'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
+const isProd = process.env.NODE_ENV === 'production'
+const hasConfiguredApi = !!process.env.NEXT_PUBLIC_API_URL
+const resolvedBaseUrl = hasConfiguredApi
+  ? process.env.NEXT_PUBLIC_API_URL!
+  : (isProd ? '' : 'http://localhost:4000')
+
+export const apiConfigured = hasConfiguredApi || !isProd
 
 export const api = axios.create({
-  baseURL: API_BASE_URL,
+  // In production without NEXT_PUBLIC_API_URL, avoid hitting localhost
+  baseURL: resolvedBaseUrl || undefined,
   headers: {
     'Content-Type': 'application/json',
   },
