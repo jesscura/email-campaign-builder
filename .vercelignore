@@ -1,0 +1,10 @@
+# Exclude local API and infra artifacts from Vercel's upload
+apps/api/
+apps/workers/
+Dockerfile.api
+fly.toml
+docker-compose.yml
+README_STATUS_CHECK.md
+PR5_STATUS_REPORT.md
+REVIEW_SUMMARY.md
+UI_MODERNIZATION_SUMMARY.md

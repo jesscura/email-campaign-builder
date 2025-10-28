@@ -2,6 +2,14 @@
   "version": 2,
   "framework": "nextjs",
   "buildCommand": "next build",
+  "env": {
+    "NODE_OPTIONS": "--max_old_space_size=2048"
+  }
+}
+{
+  "version": 2,
+  "framework": "nextjs",
+  "buildCommand": "next build",
   "outputDirectory": ".vercel/output",
   "env": {
     "NEXT_TELEMETRY_DISABLED": "1"
