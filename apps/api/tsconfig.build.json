@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "sourceMap": false
+  },
+  "include": [
+    "src/main.ts",
+    "src/app.module.ts",
+    "src/prisma/**/*.ts",
+    "src/health/**/*.ts",
+    "src/campaigns/**/*.ts",
+    "src/audiences/**/*.ts"
+  ],
+  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
+}

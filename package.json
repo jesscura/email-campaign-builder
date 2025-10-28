@@ -29,7 +29,10 @@
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
     "setup": "pnpm install && pnpm prisma:generate && pnpm prisma:migrate",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "dev:api:npm": "npm run -w @sagestone/api dev",
+    "build:api:npm": "npm run -w @sagestone/api build",
+    "start:api:npm": "npm run -w @sagestone/api start"
   },
   "workspaces": [
     "apps/*",

@@ -1,3 +1,28 @@
+# Standalone API container for apps/api (NestJS)
+FROM node:20-alpine AS base
+WORKDIR /app
+
+# Install dependencies
+COPY package.json .
+# Copy workspace manifest for npm workspaces
+COPY apps/api/package.json apps/api/package.json
+COPY prisma/schema.prisma prisma/schema.prisma
+
+RUN npm install --silent
+
+# Build API
+COPY apps/api apps/api
+RUN npx prisma generate && npm run -w @sagestone/api build
+
+FROM node:20-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+
+COPY --from=base /app/node_modules /app/node_modules
+COPY --from=base /app/apps/api/dist /app/apps/api/dist
+
+EXPOSE 4000
+CMD ["node", "apps/api/dist/main.js"]
 FROM node:20-alpine AS base
 WORKDIR /app
 
