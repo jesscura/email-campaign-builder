@@ -112,7 +112,23 @@ npx prisma migrate deploy
 ```
 
 ### Option B: Using GitHub Actions
-Create a GitHub Action to run migrations on deploy (recommended for production).
+Automate migrations on every push to main (recommended):
+
+1) Add repository secrets (GitHub → Settings → Secrets and variables → Actions → New repository secret):
+  - DATABASE_URL (recommended)
+  - or provide Vercel credentials instead:
+    - VERCEL_TOKEN
+    - VERCEL_ORG_ID
+    - VERCEL_PROJECT_ID
+
+2) The workflow at `.github/workflows/prisma-migrate.yml` will:
+  - Use `DATABASE_URL` directly if provided, or
+  - Pull production env vars from Vercel and export `DATABASE_URL`
+  - Run `npx prisma migrate deploy`
+
+3) Trigger:
+  - Automatically on push to `main` affecting `prisma/**`, or
+  - Manually via the “Run workflow” button (Workflow dispatch)
 
 ### Option C: Manual via Vercel Dashboard
 1. Ensure `DATABASE_URL` is set to `POSTGRES_PRISMA_URL` in your Vercel environment variables

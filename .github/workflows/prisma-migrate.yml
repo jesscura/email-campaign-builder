@@ -1,0 +1,58 @@
+name: DB Migrations (Prisma)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'prisma/**'
+      - 'package.json'
+      - '.github/workflows/prisma-migrate.yml'
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Pull Vercel env (production)
+        if: ${{ !secrets.DATABASE_URL && secrets.VERCEL_TOKEN && secrets.VERCEL_ORG_ID && secrets.VERCEL_PROJECT_ID }}
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          npm i -g vercel
+          vercel pull --yes --environment=production --token=$VERCEL_TOKEN --scope=$VERCEL_ORG_ID
+          if [ -f .env.local ]; then
+            DB_LINE=$(grep -E '^DATABASE_URL=' .env.local || true)
+            if [ -n "$DB_LINE" ]; then
+              DB_VAL=$(echo "$DB_LINE" | sed -e 's/^DATABASE_URL=//' -e 's/^"//' -e 's/"$//')
+              echo "DATABASE_URL=$DB_VAL" >> $GITHUB_ENV
+            fi
+          fi
+
+      - name: Run migrations (using DATABASE_URL secret)
+        if: ${{ secrets.DATABASE_URL }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npx prisma migrate deploy
+
+      - name: Run migrations (using Vercel env)
+        if: ${{ !secrets.DATABASE_URL && env.DATABASE_URL }}
+        run: npx prisma migrate deploy
+
+      - name: Missing configuration
+        if: ${{ !secrets.DATABASE_URL && !env.DATABASE_URL }}
+        run: |
+          echo "::error::No DATABASE_URL available. Set repository secret DATABASE_URL or provide VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID to pull envs."
+          exit 1
