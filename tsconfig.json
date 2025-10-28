@@ -39,10 +39,10 @@
   ],
   "exclude": [
     "node_modules",
-    "sagestone-email",
     "apps/api",
     "apps/web",
     "apps/workers",
-    "packages/**"
+    "packages/**",
+    "sagestone-email/**"
   ]
 }
