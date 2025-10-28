@@ -1,0 +1,5 @@
+# Migration bump
+# Touch or edit this file to trigger the DB Migrations (Prisma) GitHub Action.
+# The workflow listens to changes under prisma/** on pushes to main.
+# Usage: commit with a short message like "chore(db): migrate bump".
+# No functional changes; this file exists solely to trigger the workflow.

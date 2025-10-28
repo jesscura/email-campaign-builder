@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import tinycolor from 'tinycolor2'
 import { Campaign } from '@/store/campaign'
 import prisma from '@/lib/prisma'
+import { stripe as stripeClient } from '@/lib/stripe'
+import { readSession, zohoApi } from '@/lib/zoho'
 
 const spamWords = ['free', 'winner', 'guarantee', 'act now', 'urgent', 'prize', 'risk-free', 'best price']
 const ctaRegex = /(call to action|shop now|buy now|learn more|get started|signup|sign up|subscribe)/i
@@ -88,7 +90,7 @@ export async function POST(req: NextRequest) {
 }
 
 // Lightweight runtime readiness check for post-deploy validation
-export async function GET() {
+export async function GET(request: NextRequest) {
   const requiredEnv = [
     'DATABASE_URL',
     'NEXTAUTH_URL',
@@ -112,6 +114,45 @@ export async function GET() {
 
   const externalApiConfigured = !!process.env.NEXT_PUBLIC_API_URL
 
+  // Stripe readiness (lightweight, non-mutating)
+  const stripeConfigured = !!process.env.STRIPE_SECRET_KEY && process.env.STRIPE_SECRET_KEY !== 'sk_test_placeholder'
+  let stripeOk = false as boolean
+  let stripeError: string | undefined
+  let stripeLatencyMs: number | undefined
+  try {
+    if (stripeConfigured) {
+      const t0 = Date.now()
+      // Read-only list call to validate credentials/connectivity
+      await stripeClient.products.list({ limit: 1 })
+      stripeLatencyMs = Date.now() - t0
+      stripeOk = true
+    }
+  } catch (err: any) {
+    stripeOk = false
+    stripeError = err?.message?.slice(0, 300) || 'Unknown Stripe error'
+  }
+
+  // Zoho readiness
+  const zohoEnvConfigured = !!process.env.ZOHO_CLIENT_ID && !!process.env.ZOHO_CLIENT_SECRET && !!process.env.ZOHO_REDIRECT_URI
+  const zohoSession = readSession(request)
+  const zohoConnected = !!zohoSession?.access_token || !!zohoSession?.refresh_token
+  let zohoOk = false as boolean
+  let zohoError: string | undefined
+  let zohoUser: { email?: string } | null = null
+  try {
+    if (zohoEnvConfigured && zohoConnected) {
+      const info = await zohoApi(request, '/userinfo') as any
+      zohoUser = { email: info?.email }
+      zohoOk = true
+    } else if (zohoEnvConfigured) {
+      // Environment configured but not connected for this requester
+      zohoOk = false
+    }
+  } catch (err: any) {
+    zohoOk = false
+    zohoError = err?.message?.slice(0, 300) || 'Unknown Zoho error'
+  }
+
   return NextResponse.json({
     ok: missing.length === 0 && dbOk,
     env: {
@@ -125,6 +166,19 @@ export async function GET() {
     api: {
       externalConfigured: externalApiConfigured,
       baseUrl: externalApiConfigured ? process.env.NEXT_PUBLIC_API_URL : null,
+    },
+    stripe: {
+      configured: stripeConfigured,
+      ok: stripeConfigured ? stripeOk : false,
+      latencyMs: stripeLatencyMs ?? null,
+      error: stripeError,
+    },
+    zoho: {
+      envConfigured: zohoEnvConfigured,
+      connected: zohoConnected,
+      ok: zohoEnvConfigured ? zohoOk : false,
+      user: zohoUser,
+      error: zohoError,
     },
     runtime: {
       node: process.version,

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
 // GET /api/plans - Get all active plans
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const plans = await prisma.plan.findMany({
       where: { isActive: true },
